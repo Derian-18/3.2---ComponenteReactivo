@@ -1,0 +1,57 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>ReactiveEventMonitor</h1>
+    <div class="status-badge" [class.active]="isActive" [class.inactive]="!isActive">
+      <span class="status-dot"></span>
+      {{ isActive ? 'Monitoreo Activo' : 'Monitoreo Detenido' }}
+    </div>
+  </header>
+
+  <main class="dashboard-grid">
+    <!-- Tarjeta Central con Contador -->
+    <section class="card counter-card">
+      <h2>Valor Actual</h2>
+      <div class="counter-display">{{ currentValue$ | async }}</div>
+      
+      <div class="controls-group">
+        <button 
+          class="btn btn-start" 
+          [disabled]="isActive" 
+          (click)="startMonitoring()">
+          Iniciar
+        </button>
+        <button 
+          class="btn btn-stop" 
+          [disabled]="!isActive" 
+          (click)="stopMonitoring()">
+          Detener
+        </button>
+        <button 
+          class="btn btn-reset" 
+          (click)="resetMonitoring()">
+          Reiniciar
+        </button>
+      </div>
+    </section>
+
+    <!-- Historial de Eventos -->
+    <section class="card history-card">
+      <h2>Historial de Eventos (Últimos 10)</h2>
+      <div class="history-list">
+        @if (eventLogs.length === 0) {
+          <p class="empty-state">No hay eventos registrados.</p>
+        } @else {
+          <ul>
+            @for (log of eventLogs; track log.id) {
+              <li class="history-item">
+                <span class="log-id">#{{ log.id }}</span>
+                <span class="log-value">Valor: <strong>{{ log.value }}</strong></span>
+                <span class="log-time">{{ log.timestamp }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </section>
+  </main>
+</div>
